@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fintex Online Account Portal</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f5f7fa;
+      margin: 0;
+    }
+    .centered {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .container {
+      text-align: center;
+      padding: 2rem;
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      margin: 0 auto 20px;
+      background-color: #1e40af;
+      border-radius: 50%;
+    }
+    h1 {
+      font-size: 28px;
+      margin-bottom: 10px;
+      color: #1a1a1a;
+    }
+    .subtext {
+      font-size: 16px;
+      color: #555;
+      margin-bottom: 30px;
+    }
+    .login-form input, .tab-content input {
+      display: block;
+      width: 100%;
+      margin-bottom: 15px;
+      padding: 12px;
+      border: 1px solid #cbd5e0;
+      border-radius: 6px;
+      font-size: 16px;
+    }
+    .login-form button, .dashboard button, .tab-content button {
+      background-color: #1e40af;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    .login-form button:hover, .dashboard button:hover, .tab-content button:hover {
+      background-color: #1a3694;
+    }
+    .hidden {
+      display: none;
+    }
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .tab-content {
+      margin-top: 20px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <div class="centered">
+    <div id="loginScreen" class="container">
+      <div class="logo"></div>
+      <h1>Welcome to Fintex Online Account Portal</h1>
+      <p class="subtext">Secure. Simple. Global Access.</p>
+      <form class="login-form" onsubmit="handleLogin(event)">
+        <input type="text" id="username" placeholder="Username" required />
+        <input type="password" id="password" placeholder="Password" required />
+        <button type="submit">Sign In</button>
+      </form>
+    </div>
+
+    <div id="dashboard" class="container hidden">
+      <h1>Welcome, Alex</h1>
+      <p class="subtext">What would you like to do today?</p>
+      <div class="dashboard">
+        <button onclick="startApplication()">Open a New Account</button>
+        <button onclick="startApplication()">Edit Current Account Application</button>
+      </div>
+    </div>
+
+    <div id="applicationForm" class="container hidden">
+      <h1 id="formTitle">New Account Application</h1>
+      <p class="subtext">Section <span id="stepIndicator">1</span> of 9</p>
+      <div id="tabContent" class="tab-content">
+        <input type="text" id="firstName" placeholder="First Name" required />
+        <input type="text" id="lastName" placeholder="Last Name" required />
+        <button onclick="nextStep()">Next</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const sections = [
+      "Personal Information", "Employment Information", "Investment Profile", "Regulatory Items",
+      "Account Features", "Document Upload", "Disclosures and Signatures",
+      "Confirmations and Statements", "Review and Submit"
+    ];
+    let currentStep = 0;
+
+    function handleLogin(event) {
+      event.preventDefault();
+      document.getElementById('loginScreen').classList.add('hidden');
+      document.getElementById('dashboard').classList.remove('hidden');
+    }
+
+    function startApplication() {
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('applicationForm').classList.remove('hidden');
+      updateFormStep();
+    }
+
+    function updateFormStep() {
+      document.getElementById('formTitle').textContent = sections[currentStep];
+      document.getElementById('stepIndicator').textContent = currentStep + 1;
+      document.getElementById('tabContent').innerHTML = `
+        <input type="text" id="firstName" placeholder="First Name" required />
+        <input type="text" id="lastName" placeholder="Last Name" required />
+        <button onclick="nextStep()">${currentStep === sections.length - 1 ? 'Submit' : 'Next'}</button>
+      `;
+    }
+
+    function nextStep() {
+      const first = document.getElementById('firstName').value;
+      const last = document.getElementById('lastName').value;
+      if (!first || !last) {
+        alert("Please fill out both fields.");
+        return;
+      }
+
+      if (currentStep < sections.length - 1) {
+        currentStep++;
+        updateFormStep();
+      } else {
+        alert("Application submitted successfully!");
+        window.location.reload();
+      }
+    }
+  </script>
+</body>
+</html>
+
